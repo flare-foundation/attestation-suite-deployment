@@ -1,0 +1,20 @@
+
+
+services:
+  ripple-node:
+    image: flarefoundation/rippled:1.12.0
+    restart: unless-stopped
+    ports:
+      - 5005:5005   # port_rpc_admin_local
+      - 6006:6006   # port_ws_admin_local
+      - 51235:51235 # port_peer
+      - 51234:51234 # port_rpc_public
+      - 51233:51233 # port_ws_public
+      - 50051:50051 # port_grpc
+    volumes:
+      - ripple-mainnet-data:/opt/ripple/.ripple/db
+      - ./rippled.conf:/opt/ripple/.ripple/rippled.conf
+      - ./validators.txt:/opt/ripple/.ripple/validators.txt
+
+volumes:
+  ripple-mainnet-data:

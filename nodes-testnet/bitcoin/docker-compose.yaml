@@ -1,0 +1,15 @@
+
+
+services:
+  bitcoin-node:
+    image: flarefoundation/bitcoin:25.0
+    restart: unless-stopped
+    ports:
+      - 18332:18332
+      - 18333:18333
+    volumes:
+      - bitcoin-testnet-data:/opt/bitcoin/.bitcoin/db
+      - ./bitcoin.conf:/opt/bitcoin/.bitcoin/bitcoin.conf
+
+volumes:
+  bitcoin-testnet-data:

@@ -1,0 +1,16 @@
+
+
+services:
+  dogecoin-node:
+    image: flarefoundation/dogecoin:1.14.6
+    restart: unless-stopped
+    ports:
+      - 44555:44555
+      - 44556:44556
+    volumes:
+      - dogecoin-testnet-data:/opt/dogecoin/.dogecoin/db
+      - ./dogecoin.conf:/opt/dogecoin/.dogecoin/dogecoin.conf
+
+
+volumes:
+  dogecoin-testnet-data:

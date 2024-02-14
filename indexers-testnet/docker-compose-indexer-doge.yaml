@@ -1,0 +1,100 @@
+
+
+services:
+  verification-server:
+    image: attestation-suite
+    volumes:
+      - ../credentials.prepared/doge-indexer-verifier:/app/attestation-suite-config
+    container_name: indexer-doge-verification-server
+    command: verification-server doge
+    restart: unless-stopped
+    environment:
+      APP_BASE_PATH: /verifier/doge
+      MYSQL_ROOT_PASSWORD: test123
+      EXTERNAL: django
+      TESTNET: true
+    #depends_on:
+    #  - database
+    ports:
+      - 9504:9500
+
+  spammer:
+    image: attestation-suite
+    profiles: ["spammer"]
+    volumes:
+      - ../credentials.prepared/doge-indexer-verifier:/app/attestation-suite-config
+    container_name: indexer-doge-spammer
+    command: spammer DOGE 10000
+    restart: unless-stopped
+    environment:
+      EXTERNAL: django
+      TESTNET: true
+
+
+  postgresdb:
+    container_name: indexer-doge-postgresdb
+    image: postgres
+    # environment:
+    #   POSTGRES_DB: ${DB_NAME}
+    #   POSTGRES_USER: ${DB_USER}
+    #   POSTGRES_PASSWORD: ${DB_PASSWORD}
+    env_file:
+      - doge-indexer.env
+    ports:
+      - "127.0.0.1:${DB_PROXY_PORT}:5432"
+    restart: unless-stopped
+    volumes:
+      - doge-indexer-postgresdb:/var/lib/postgresql/data
+
+  indexer-server:
+    container_name: indexer-doge-server
+    user: ${USER_UID}:${USER_GID}
+    image: ${DOCKER_IMAGE_URL}
+    environment:
+      DB_PORT: 5432
+      DB_HOST: postgresdb
+    env_file:
+      - doge-indexer.env
+    ports:
+      - "127.0.0.1:${LISTEN_PORT}:3030"
+    depends_on:
+      - postgresdb
+    restart: unless-stopped
+    volumes:
+      - doge-indexer-static:/appdata/static
+
+  indexer-indexer:
+    container_name: indexer-doge-index-blocks
+    user: ${USER_UID}:${USER_GID}
+    image: ${DOCKER_IMAGE_URL}
+    command: /app/docker/remote/entrypoint-index.sh
+    environment:
+      DB_PORT: 5432
+      DB_HOST: postgresdb
+    env_file:
+      - doge-indexer.env
+    depends_on:
+      - postgresdb
+    restart: unless-stopped
+    volumes:
+      - doge-indexer-static:/appdata/static
+
+  indexer-prune:
+    container_name: indexer-doge-prune-blocks
+    user: ${USER_UID}:${USER_GID}
+    image: ${DOCKER_IMAGE_URL}
+    command: /app/docker/remote/entrypoint-prune.sh
+    environment:
+      DB_PORT: 5432
+      DB_HOST: postgresdb
+    env_file:
+      - doge-indexer.env
+    depends_on:
+      - postgresdb
+    restart: unless-stopped
+    volumes:
+      - doge-indexer-static:/appdata/static
+
+volumes:
+  doge-indexer-static:
+  doge-indexer-postgresdb:
