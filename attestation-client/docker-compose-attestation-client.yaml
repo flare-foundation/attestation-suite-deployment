@@ -39,7 +39,7 @@ services:
     cap_add:
       - SYS_NICE
     ports:
-      - 13306:3306
+      - 127.0.0.1:13306:3306
     volumes:
     #   - ./mysql-conf.d/:/etc/mysql/conf.d
     #   - ./mysql-initdb/:/docker-entrypoint-initdb.d

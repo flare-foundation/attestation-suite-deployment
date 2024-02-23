@@ -3,13 +3,14 @@
 services:
   bitcoin-node:
     image: flarefoundation/bitcoin:25.0
+    container_name: node-mainnet-btc
     restart: unless-stopped
     ports:
-      - 18332:18332
-      - 18333:18333
+      - 8332:8332
+      - 8333:8333
     volumes:
-      - bitcoin-testnet-data:/opt/bitcoin/.bitcoin/db
+      - bitcoin-mainnet-data:/opt/bitcoin/.bitcoin/db
       - ./bitcoin.conf:/opt/bitcoin/.bitcoin/bitcoin.conf
 
 volumes:
-  bitcoin-testnet-data:
+  bitcoin-mainnet-data:
