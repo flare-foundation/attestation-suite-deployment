@@ -1,6 +1,6 @@
 services:
   evm-verifier:
-    image: evm-verifier
+    image: flarefoundation/evm-verifier
     container_name: evm-verifier
     restart: unless-stopped
     ports:

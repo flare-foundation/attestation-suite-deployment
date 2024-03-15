@@ -2,7 +2,7 @@
 
 services:
   monitor:
-    image: attestation-suite
+    image: flarefoundation/attestation-client
     network_mode: host
     volumes:
       - ../credentials.prepared/monitor:/app/attestation-suite-config

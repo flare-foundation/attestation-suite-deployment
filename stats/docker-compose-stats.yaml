@@ -2,7 +2,7 @@
 
 services:
   stats:
-    image: attestation-suite
+    image: flarefoundation/attestation-client
     network_mode: host
     user: root
     volumes:

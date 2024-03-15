@@ -2,7 +2,7 @@
 
 services:
   indexer:
-    image: attestation-suite
+    image: flarefoundation/attestation-client
     volumes:
       - ../credentials.prepared/btc-indexer-verifier:/app/attestation-suite-config
     container_name: indexer-btc-indexer
@@ -10,21 +10,22 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: test123
-      TESTNET: true
+      TESTNET: ${TESTNET}
     depends_on:
       - database
 
   verification-server:
-    image: attestation-suite
+    image: flarefoundation/attestation-client
     volumes:
       - ../credentials.prepared/btc-indexer-verifier:/app/attestation-suite-config
     container_name: indexer-btc-verification-server
-    command: verification-server btc
+    command: verification-server
     restart: unless-stopped
     environment:
+      VERIFIER_TYPE: btc
       APP_BASE_PATH: /verifier/btc
       MYSQL_ROOT_PASSWORD: test123
-      TESTNET: true
+      TESTNET: ${TESTNET}
     depends_on:
       - database
     ports:
@@ -46,7 +47,7 @@ services:
       - indexer-btc-db:/var/lib/mysql
 
   spammer:
-    image: attestation-suite
+    image: flarefoundation/attestation-client
     profiles: ["spammer"]
     volumes:
       - ../credentials.prepared/btc-indexer-verifier:/app/attestation-suite-config
@@ -54,7 +55,7 @@ services:
     command: spammer BTC 10000
     restart: unless-stopped
     environment:
-      TESTNET: true
+      TESTNET: ${TESTNET}
 
 volumes:
   indexer-btc-db:

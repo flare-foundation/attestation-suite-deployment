@@ -2,7 +2,7 @@
 
 services:
   indexer:
-    image: attestation-suite
+    image: flarefoundation/attestation-client
     volumes:
       - ../credentials.prepared/xrp-indexer-verifier:/app/attestation-suite-config
     container_name: indexer-xrp-indexer
@@ -10,19 +10,22 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: test123
+      TESTNET: ${TESTNET}
     depends_on:
       - database
 
   verification-server:
-    image: attestation-suite
+    image: flarefoundation/attestation-client
     volumes:
       - ../credentials.prepared/xrp-indexer-verifier:/app/attestation-suite-config
     container_name: indexer-xrp-verification-server
-    command: verification-server xrp
+    command: verification-server
     restart: unless-stopped
     environment:
+      VERIFIER_TYPE: xrp
       APP_BASE_PATH: /verifier/xrp
       MYSQL_ROOT_PASSWORD: test123
+      TESTNET: ${TESTNET}
     depends_on:
       - database
     ports:
@@ -44,13 +47,15 @@ services:
       - indexer-xrp-db:/var/lib/mysql
 
   spammer:
-    image: attestation-suite
+    image: flarefoundation/attestation-client
     profiles: ["spammer"]
     volumes:
       - ../credentials.prepared/xrp-indexer-verifier:/app/attestation-suite-config
     container_name: indexer-xrp-spammer
     command: spammer XRP 10000
     restart: unless-stopped
+    environment:
+      TESTNET: ${TESTNET}
 
 volumes:
   indexer-xrp-db:

@@ -8,15 +8,15 @@ USER_GID=$(id -g)
 
 docker run -u root --rm \
     -v $WORKING_DIR/credentials:/app/attestation-client/credentials \
-    attestation-suite \
-    yarn ts-node src/install/installCredentials.ts 
+    flarefoundation/attestation-client \
+    yarn ts-node src/install/installCredentials.ts
 
 docker run -u root --rm \
     -v $WORKING_DIR/credentials:/app/attestation-client/credentials \
-    attestation-suite \
+    flarefoundation/attestation-client \
     cp configs/.install/configurations.json credentials/
 
 docker run -u root --rm \
     -v $WORKING_DIR/credentials:/app/attestation-client/credentials \
-    attestation-suite \
+    flarefoundation/attestation-client \
     chown -R $USER_UID:$USER_GID credentials

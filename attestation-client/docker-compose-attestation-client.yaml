@@ -2,7 +2,7 @@
 
 services:
   attestation-client:
-    image: attestation-suite
+    image: flarefoundation/attestation-client
     volumes:
       - ../credentials.prepared/attester-client:/app/attestation-suite-config
     container_name: attestation-client-client
@@ -16,7 +16,7 @@ services:
       - database
 
   webserver:
-    image: attestation-suite
+    image: flarefoundation/attestation-client
     volumes:
       - ../credentials.prepared/webserver:/app/attestation-suite-config
     container_name: attestation-client-webserver
