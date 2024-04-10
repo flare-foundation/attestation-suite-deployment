@@ -7,9 +7,8 @@ services:
       - 9800:9800
     environment:
       PORT: 9800
-      API_KEYS: apikey
-      RPC_FLR: "http://flare-node:9650/ext/bc/C/rpc"
-      RPC_ETH: "http://ethereum-node:8545/"
-      APP_BASE_PATH: "/verifier"
-      TESTNET: false
-
+      API_KEYS: ${API_KEYS}
+      RPC_FLR: ${RPC_FLR}
+      RPC_ETH: ${RPC_ETH}
+      APP_BASE_PATH: ${APP_BASE_PATH}
+      TESTNET: ${TESTNET}

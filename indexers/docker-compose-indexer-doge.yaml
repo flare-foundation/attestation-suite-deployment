@@ -11,7 +11,6 @@ services:
     environment:
       VERIFIER_TYPE: doge
       APP_BASE_PATH: /verifier/doge
-      MYSQL_ROOT_PASSWORD: test123
       EXTERNAL: django
       TESTNET: ${TESTNET}
     #depends_on:
@@ -34,7 +33,7 @@ services:
 
   postgresdb:
     container_name: indexer-doge-postgresdb
-    image: postgres
+    image: postgres:16
     env_file:
       - doge-indexer.env
     ports:
