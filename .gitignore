@@ -1,0 +1,35 @@
+### VisualStudioCode template
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+/build
+/bin
+/tmp_data
+/tmp
+/temp
+/cache
+/logs
+*.log
+
+## Misc
+nul
+.env
+*.env
+
+# alerts
+status.json
+
+# Auto generated docs
+/genDocs
+
+# dockerication mapping test folder
+credentials
+credentials.prepared
+prepare.secure
+
+# local configs
+# .indexer.remote.dev.read.env
+# .indexer.remote.dev.write.env
