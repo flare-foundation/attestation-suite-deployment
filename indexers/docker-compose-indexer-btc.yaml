@@ -12,6 +12,8 @@ services:
       TESTNET: ${TESTNET}
     depends_on:
       - database
+    networks:
+      - attestation_suite_network
 
   verification-server:
     image: flarefoundation/attestation-client
@@ -28,18 +30,22 @@ services:
       - database
     ports:
       - 9500:9500
+    networks:
+      - attestation_suite_network
 
   database:
     container_name: indexer-btc-database
     image: postgres:16
     ports:
-      - 127.0.0.1:25434:5432
+      - 25434:5432
     restart: unless-stopped
     env_file:
       - btc-indexer.env
     volumes:
       - ./postgres-init:/docker-entrypoint-initdb.d
       - indexer-btc-db:/var/lib/postgresql/data
+    networks:
+      - attestation_suite_network
 
   spammer:
     image: flarefoundation/attestation-client
@@ -51,6 +57,12 @@ services:
     restart: unless-stopped
     environment:
       TESTNET: ${TESTNET}
+    networks:
+      - attestation_suite_network
 
 volumes:
   indexer-btc-db:
+
+networks:
+  attestation_suite_network:
+    external: true

@@ -16,6 +16,12 @@ services:
       - ripple-mainnet-data:/opt/ripple/.ripple/db
       - ./rippled.conf:/opt/ripple/.ripple/rippled.conf
       - ./validators.txt:/opt/ripple/.ripple/validators.txt
+    networks:
+      - attestation_suite_network
 
 volumes:
   ripple-mainnet-data:
+
+networks:
+  attestation_suite_network:
+    external: true

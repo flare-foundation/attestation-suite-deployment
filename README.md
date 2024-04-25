@@ -135,6 +135,40 @@ Some of the more important settings and credentials include:
 - In `verifier-server-credentials.json` - Set API keys for supported external blockchains (currently BTC, DOGE and XRP). Default templates are configured
 for two API keys.
 
+### 2.2.1 Configure gcloud
+If you are not running the suite in a Google Cloud VM, you need to initialize gcloud to access this vault.
+
+The `attestation-suite` needs access to the Secret Manager in gcloud when using credentials from GoogleCloudSecretManager.
+
+Run:
+
+```bash
+docker run --user root -it attestation-suite bash
+```
+
+Inside Docker bash, run:
+
+```bash
+apt-get install apt-transport-https ca-certificates gnupg -y
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+apt-get update && apt-get install google-cloud-cli
+```
+
+Follow the instructions and initialize `gcloud`.
+
+Consider creating a service account in Google IAM with the `Secret Manager Secret Accessor` role.
+
+Then run `gcloud auth application-default login --impersonate-service-account <service-account-email>` to initialize application access.
+OR
+run `gcloud auth application-default login` to initialize with your Google account
+
+Then exit Docker bash with `exit` command.
+Get this container's ID with the command `docker ps` and save the image with GCSM initialized with the command:
+```bash
+Docker commit <container-id> attestation-suite
+```
+
 ### 2.3 Prepare Credentials
 
 After credentials have been set up they must be prepared for deployment:
@@ -219,7 +253,7 @@ If you are only deploying indexers, you don't need to configure other configurat
 
 Database credentials for indexers are configured in `*.env` files in `indexers` subfolder. Copy the `btc-indexer.env.example` to `btc-indexer.env` and configure database with the same credentials set in `database-credentials.json`. Configuration is the same for btc and xrp.
 
-Dogecoin indexer is special, Dogecoin node rpc parameters and database credentials need to be set not only in json files in `credentials` folder but also in `doge-indexer.env`.
+Dogecoin indexer is special, Dogecoin node rpc parameters and database credentials need to be set not only in json files in `credentials` folder but also in `indexers/doge-indexer.env`.
 
 To configure if indexers are running on mainnet or testnet copy `indexers/env.example` to `indexers/.env` and set `TESTNET` variable.
 
@@ -241,8 +275,12 @@ Network name must also be set in `attestation-client.env`.
 
 EVM verifier is configured with env variables. Example values are provided in `evm-verifier/env.example`
 
-## Step 4 Running
+### 3.5 Create a docker network for the attestation suite
+```
+docker network create attestation_suite_network
+```
 
+## Step 4 Running
 
 ### 3.1 Starting blockchain nodes
 

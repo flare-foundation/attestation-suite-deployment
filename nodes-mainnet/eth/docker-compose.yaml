@@ -4,7 +4,6 @@ services:
   geth:
     image: ethereum/client-go:stable
     container_name: ethereum
-    user: 10002:10002
     command:
       - --mainnet
       - --datadir=/opt/ethereumd/.ethereum
@@ -21,16 +20,15 @@ services:
     volumes:
       - ./ethdata:/opt/ethereumd/.ethereum
       - ./jwt.hex:/opt/ethereumd/.ethereum/jwt.hex
+    networks:
+      - attestation_suite_network
 
   beacon:
     image: gcr.io/prysmaticlabs/prysm/beacon-chain:stable
     container_name: beacon
-    user: 10002:10002
     command:
       - --mainnet
       - --config-file=/opt/ethereumd/data/beacon.yaml
-      - --checkpoint-sync-url=${CHECKPOINT_URL}
-      - --genesis-beacon-api-url=${CHECKPOINT_URL}
     ports:
       - 3500:3500
       - 12000:12000
@@ -38,3 +36,10 @@ services:
       - ./ethdata:/opt/ethereumd/data
       - ./beacon.yaml:/opt/ethereumd/data/beacon.yaml
       - ./jwt.hex:/opt/ethereumd/data/jwt.hex
+    networks:
+      - attestation_suite_network
+    
+
+networks:
+  attestation_suite_network:
+    external: true

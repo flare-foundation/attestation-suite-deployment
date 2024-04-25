@@ -11,6 +11,12 @@ services:
     volumes:
       - dogecoin-mainnet-data:/opt/dogecoin/.dogecoin/db
       - ./dogecoin.conf:/opt/dogecoin/.dogecoin/dogecoin.conf
+    networks:
+      - attestation_suite_network
 
 volumes:
   dogecoin-mainnet-data:
+
+networks:
+  attestation_suite_network:
+    external: true
