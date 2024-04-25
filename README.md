@@ -275,8 +275,12 @@ Network name must also be set in `attestation-client.env`.
 
 EVM verifier is configured with env variables. Example values are provided in `evm-verifier/env.example`
 
-## Step 4 Running
+### 3.5 Create a docker network for the attestation suite
+```
+docker network create attestation_suite_network
+```
 
+## Step 4 Running
 
 ### 3.1 Starting blockchain nodes
 

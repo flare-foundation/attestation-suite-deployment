@@ -17,6 +17,8 @@ services:
     #  - database
     ports:
       - 9504:9500
+    networks:
+      - attestation_suite_network
 
   spammer:
     image: flarefoundation/attestation-client
@@ -29,6 +31,8 @@ services:
     environment:
       EXTERNAL: django
       TESTNET: ${TESTNET}
+    networks:
+      - attestation_suite_network
 
 
   postgresdb:
@@ -37,10 +41,12 @@ services:
     env_file:
       - doge-indexer.env
     ports:
-      - 127.0.0.1:25432:5432
+      - 25432:5432
     restart: unless-stopped
     volumes:
       - doge-indexer-postgresdb:/var/lib/postgresql/data
+    networks:
+      - attestation_suite_network
 
   indexer-server:
     container_name: indexer-doge-server
@@ -52,12 +58,14 @@ services:
     env_file:
       - doge-indexer.env
     ports:
-      - 127.0.0.1:8400:8400
+      - 8400:8400
     depends_on:
       - postgresdb
     restart: unless-stopped
     volumes:
       - doge-indexer-static:/appdata/static
+    networks:
+      - attestation_suite_network
 
   indexer-indexer:
     container_name: indexer-doge-index-blocks
@@ -74,6 +82,8 @@ services:
     restart: unless-stopped
     volumes:
       - doge-indexer-static:/appdata/static
+    networks:
+      - attestation_suite_network
 
   indexer-prune:
     container_name: indexer-doge-prune-blocks
@@ -90,7 +100,13 @@ services:
     restart: unless-stopped
     volumes:
       - doge-indexer-static:/appdata/static
+    networks:
+      - attestation_suite_network
 
 volumes:
   doge-indexer-static:
   doge-indexer-postgresdb:
+
+networks:
+  attestation_suite_network:
+    external: true
