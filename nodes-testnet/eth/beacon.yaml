@@ -21,3 +21,7 @@ jwt-secret: /opt/ethereumd/data/jwt.hex
 # Connection to geth container
 execution-endpoint: http://geth:8551
 
+##############################
+# State sync
+checkpoint-sync-url: https://beaconstate-sepolia.chainsafe.io
+genesis-beacon-api-url: https://beaconstate-sepolia.chainsafe.io

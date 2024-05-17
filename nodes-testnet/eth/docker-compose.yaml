@@ -4,7 +4,6 @@ services:
   geth:
     image: ethereum/client-go:stable
     container_name: ethereum
-    user: 10002:10002
     command:
       - --sepolia
       - --datadir=/opt/ethereumd/.ethereum
@@ -19,22 +18,22 @@ services:
       - 8545:8545
       - 30303:30303
     volumes:
-      - ./ethdata:/opt/ethereumd/.ethereum
+      - eth-mainnet-data:/opt/ethereumd/.ethereum
       - ./jwt.hex:/opt/ethereumd/.ethereum/jwt.hex
 
   beacon:
     image: gcr.io/prysmaticlabs/prysm/beacon-chain:stable
     container_name: beacon
-    user: 10002:10002
     command:
       - --sepolia
       - --config-file=/opt/ethereumd/data/beacon.yaml
-      - --checkpoint-sync-url=${CHECKPOINT_URL}
-      - --genesis-beacon-api-url=${CHECKPOINT_URL}
     ports:
       - 3500:3500
       - 12000:12000
     volumes:
-      - ./ethdata:/opt/ethereumd/data
+      - eth-mainnet-data:/opt/ethereumd/data
       - ./beacon.yaml:/opt/ethereumd/data/beacon.yaml
       - ./jwt.hex:/opt/ethereumd/data/jwt.hex
+
+volumes:
+  eth-mainnet-data:
