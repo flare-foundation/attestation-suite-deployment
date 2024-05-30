@@ -2,7 +2,7 @@
 
 services:
   dogecoin-node:
-    image: flarefoundation/dogecoin:1.14.6
+    image: flarefoundation/dogecoin:1.14.7
     container_name: node-mainnet-doge
     restart: unless-stopped
     ports:
