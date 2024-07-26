@@ -2,7 +2,7 @@
 
 services:
   attestation-client:
-    image: flarefoundation/attestation-client
+    image: flarefoundation/attestation-client:olympics-web2
     volumes:
       - ../credentials.prepared/attester-client:/app/attestation-suite-config
     container_name: attestation-client-client
@@ -14,7 +14,7 @@ services:
       - database
 
   webserver:
-    image: flarefoundation/attestation-client
+    image: flarefoundation/attestation-client:olympics-web2
     volumes:
       - ../credentials.prepared/webserver:/app/attestation-suite-config
     container_name: attestation-client-webserver
