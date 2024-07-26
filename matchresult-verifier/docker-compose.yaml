@@ -1,0 +1,12 @@
+
+services:
+  evm-verifier:
+    image: itkalmia/oi-match-attestation-server
+    container_name: matchresult-verifier
+    restart: unless-stopped
+    ports:
+      - 4500:4500
+    environment:
+      PORT: 4500
+      API_KEYS: 123456
+      APP_BASE_PATH: "/verifier"
